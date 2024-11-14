@@ -1,33 +1,32 @@
 function dijkstra(graph, sourceNode) {
-    
-    for (let i = 0; i < graph.length; i++) {
-        graph[i].distance = Infinity;
-        graph[i].visited = false;
+    if (!Array.isArray(graph) || graph.length === 0 || sourceNode < 0 || sourceNode >= graph.length) {
+        throw new Error("Invalid graph structure or source node.");
     }
-
-    graph[sourceNode].distance = 0;
-    
+    let dist = new Array(graph.length).fill(Infinity);
+    dist[sourceNode] = 0;
+    let visited = new Array(graph.length).fill(false);
     while (true) {
-        let currentNode = null;
-        let currentDistance = Infinity;
+        let minDist = Infinity;
+        let minNode = -1;
         for (let i = 0; i < graph.length; i++) {
-            if (!graph[i].visited && graph[i].distance < currentDistance) {
-                currentNode = graph[i];
-                currentDistance = graph[i].distance;
+            if (!visited[i] && dist[i] < minDist) {
+                minDist = dist[i];
+                minNode = i;
             }
         }
-        if (currentNode === null) {
+        if (minNode === -1) {
             break;
         }
-        for (let i = 0; i < currentNode.edges.length; i++) {
-            const neighbor = currentNode.edges[i];
-            const newDistance = currentNode.distance + neighbor.distance;
-            if (newDistance < graph[neighbor.node].distance) {
-                graph[neighbor.node].distance = newDistance;
+
+        visited[minNode] = true;
+        for (let neighbor of graph[minNode]) {
+            let [neighborNode, weight] = neighbor;
+            let newDist = dist[minNode] + weight;
+            if (newDist < dist[neighborNode]) {
+                dist[neighborNode] = newDist;
             }
         }
-        currentNode.visited = true;
     }
 
-    return graph.map(node => node.distance);
+    return dist;
 }
