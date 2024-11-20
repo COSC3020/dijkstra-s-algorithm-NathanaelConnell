@@ -44,6 +44,13 @@ const testCases = [
     graph: [[[]]],  // Single node with no edges
     sourceNode: 0,
     expected: [0]  // Only the source node, distance is 0
+  },
+  {
+    graph: [
+      [[0, 0], [0, 0]] // Test case for [0, 0]
+    ],
+    sourceNode: 0,
+    expected: [0] // Expected result for [0, 0]
   }
 ];
 
